@@ -12,5 +12,7 @@
   ],
   "env": {
     "VITE_API_URL": "https://medibook-api.onrender.com"
-  }
+  },
+  "buildCommand": "npm ci",
+  "outputDirectory": "dist"
 }

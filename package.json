@@ -1,0 +1,24 @@
+{
+  "name": "medibook-saas",
+  "version": "1.0.0",
+  "description": "MediBook Clinic Appointment Booking SaaS Application",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev --workspace=frontend\" \"npm run dev --workspace=backend\"",
+    "build": "npm run build --workspace=frontend",
+    "start": "npm run start --workspace=backend",
+    "install:all": "npm install --workspaces",
+    "clean": "rm -rf frontend/dist backend/node_modules frontend/node_modules"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
+}
