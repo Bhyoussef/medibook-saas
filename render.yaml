@@ -1,0 +1,45 @@
+services:
+  # Backend API Service
+  - type: web
+    name: medibook-api
+    env: node
+    plan: free
+    buildCommand: "cd backend && npm install"
+    startCommand: "cd backend && npm start"
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
+      - key: DB_HOST
+        value: your-database-host
+      - key: DB_PORT
+        value: 3306
+      - key: DB_NAME
+        value: medibook_prod
+      - key: DB_USER
+        value: your-db-user
+      - key: DB_PASSWORD
+        value: your-db-password
+      - key: JWT_ACCESS_SECRET
+        value: your-jwt-access-secret
+      - key: JWT_REFRESH_SECRET
+        value: your-jwt-refresh-secret
+      - key: EMAIL_HOST
+        value: smtp.gmail.com
+      - key: EMAIL_PORT
+        value: 587
+      - key: EMAIL_USER
+        value: your-email@gmail.com
+      - key: EMAIL_PASS
+        value: your-app-password
+    healthCheckPath: /api/health
+    autoDeploy: true
+
+  # Database Service (if using Render's PostgreSQL)
+  - type: pserv
+    name: medibook-db
+    plan: free
+    databaseName: medibook_prod
+    user: medibook_user
+    region: oregon
