@@ -26,6 +26,9 @@ export const getAllAppointmentsAdmin = async (req, res) => {
   }
 };
 
+// Get all appointments (alias for getAllAppointmentsAdmin)
+export const getAllAppointments = getAllAppointmentsAdmin;
+
 export const getAppointmentById = async (req, res) => {
   try {
     const { id } = req.params;
