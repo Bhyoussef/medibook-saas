@@ -56,27 +56,27 @@ jobs:
 
     - name: Install dependencies
       run: |
-        npm ci
+        cd frontend && npm ci
         cd backend && npm ci
 
     - name: Run ESLint
       run: |
-        npm run lint
+        cd frontend && npm run lint
         cd backend && npm run lint
 
     - name: Run Prettier check
       run: |
-        npm run format:check
+        cd frontend && npm run format:check
         cd backend && npm run format:check
 
     - name: Run type checking
       run: |
-        npm run type-check
+        cd frontend && npm run type-check
         cd backend && npm run type-check
 
     - name: Run unit tests
       run: |
-        npm run test:unit
+        cd frontend && npm run test:unit
         cd backend && npm run test:unit
       env:
         NODE_ENV: test
@@ -90,7 +90,7 @@ jobs:
 
     - name: Run integration tests
       run: |
-        npm run test:integration
+        cd frontend && npm run test:integration
         cd backend && npm run test:integration
       env:
         NODE_ENV: test
