@@ -5,10 +5,10 @@ dotenv.config();
 
 // Database connection configuration for PostgreSQL
 const dbConfig = {
-  host: process.env.DB_HOST || 'dpg-d70jdl9aae7s739c9pd0-a.singapore-postgres.render.com',
-  user: process.env.DB_USER || 'medibook_db_bcap_user',
-  password: process.env.DB_PASSWORD || 'kWZ3BMFn20L6j4sRWP0qOpGPsVCu4TjA',
-  database: process.env.DB_NAME || 'medibook_db_bcap',
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
   port: process.env.DB_PORT || 5432,
   ssl: { rejectUnauthorized: false },
   max: 20,
