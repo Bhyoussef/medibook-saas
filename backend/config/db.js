@@ -1,32 +1,30 @@
-import mysql from 'mysql2/promise';
+import pg from 'pg';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Database connection configuration
+// Database connection configuration for PostgreSQL
 const dbConfig = {
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'clinic_booking',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-  acquireTimeout: 60000,
-  timeout: 60000,
-  reconnect: true,
-  charset: 'utf8mb4'
+  host: process.env.DB_HOST || 'dpg-d70jdl9aae7s739c9pd0-a.singapore-postgres.render.com',
+  user: process.env.DB_USER || 'medibook_db_bcap_user',
+  password: process.env.DB_PASSWORD || 'kWZ3BMFn20L6j4sRWP0qOpGPsVCu4TjA',
+  database: process.env.DB_NAME || 'medibook_db_bcap',
+  port: process.env.DB_PORT || 5432,
+  ssl: { rejectUnauthorized: false },
+  max: 20,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
 };
 
 // Create connection pool
-const pool = mysql.createPool(dbConfig);
+const pool = new pg.Pool(dbConfig);
 
 // Test connection
 const testConnection = async () => {
   try {
-    const connection = await pool.getConnection();
+    const client = await pool.connect();
     console.log('✅ Database connected successfully');
-    connection.release();
+    client.release();
   } catch (error) {
     console.error('❌ Database connection failed:', error.message);
     process.exit(1);
@@ -36,34 +34,34 @@ const testConnection = async () => {
 // Execute query with prepared statements
 const executeQuery = async (query, params = []) => {
   try {
-    const [rows] = await pool.execute(query, params);
-    return rows;
+    const result = await pool.query(query, params);
+    return result.rows;
   } catch (error) {
-    console.error('Query execution error:', error);
-    throw new Error(`Database query failed: ${error.message}`);
+    console.error('Database query error:', error);
+    throw error;
   }
 };
 
 // Execute transaction
 const executeTransaction = async (queries) => {
-  const connection = await pool.getConnection();
+  const client = await pool.connect();
   try {
-    await connection.beginTransaction();
+    await client.query('BEGIN');
     const results = [];
     
     for (const { query, params } of queries) {
-      const [rows] = await connection.execute(query, params);
-      results.push(rows);
+      const result = await client.query(query, params);
+      results.push(result.rows);
     }
     
-    await connection.commit();
+    await client.query('COMMIT');
     return results;
   } catch (error) {
-    await connection.rollback();
+    await client.query('ROLLBACK');
     console.error('Transaction error:', error);
     throw new Error(`Transaction failed: ${error.message}`);
   } finally {
-    connection.release();
+    client.release();
   }
 };
 
