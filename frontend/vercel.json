@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "name": "medibook-frontend",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "env": {
+    "VITE_API_URL": "https://medibook-api.onrender.com"
+  }
+}
