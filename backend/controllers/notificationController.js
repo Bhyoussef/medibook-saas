@@ -432,27 +432,16 @@ export const getNotificationStats = async (req, res) => {
     const statsQuery = `
       SELECT 
         COUNT(*) as total,
-        SUM(isRead = FALSE) as unread,
-        SUM(isRead = TRUE) as read,
-        SUM(priority = 'urgent') as urgent,
-        SUM(priority = 'high') as high,
-        SUM(priority = 'medium') as medium,
-        SUM(priority = 'low') as low
+        SUM(CASE WHEN isRead = 0 THEN 1 ELSE 0 END) as unread,
+        SUM(CASE WHEN type = 'appointment' THEN 1 ELSE 0 END) as appointment,
+        SUM(CASE WHEN type = 'reminder' THEN 1 ELSE 0 END) as reminder,
+        SUM(CASE WHEN type = 'system' THEN 1 ELSE 0 END) as system
       FROM notifications 
-      WHERE userId = ? 
-      AND (expiresAt IS NULL OR expiresAt > NOW())
+      WHERE userId = ?
     `;
-    
     const stats = await executeQuery(statsQuery, [userId]);
     
-    const typeStatsQuery = `
-      SELECT type, COUNT(*) as count 
-      FROM notifications 
-      WHERE userId = ? 
-      AND (expiresAt IS NULL OR expiresAt > NOW())
-      GROUP BY type 
-      ORDER BY count DESC
-    `;
+    res.json(stats[0]);
     
     const typeStats = await executeQuery(typeStatsQuery, [userId]);
     
@@ -462,6 +451,29 @@ export const getNotificationStats = async (req, res) => {
     });
   } catch (error) {
     console.error('Get notification stats error:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+// Clean up expired notifications
+export const cleanupExpiredNotifications = async (req, res) => {
+  try {
+    const cleanupQuery = `
+      DELETE FROM notifications 
+      WHERE type = 'reminder' 
+      AND createdAt < DATE_SUB(NOW(), INTERVAL 7 DAY)
+      AND isRead = 0
+    `;
+    
+    const result = await executeQuery(cleanupQuery);
+    
+    res.json({
+      success: true,
+      message: 'Expired notifications cleaned up',
+      deletedCount: result.affectedRows
+    });
+  } catch (error) {
+    console.error('Cleanup expired notifications error:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
