@@ -29,6 +29,28 @@ export const getAllAppointmentsAdmin = async (req, res) => {
 // Get all appointments (alias for getAllAppointmentsAdmin)
 export const getAllAppointments = getAllAppointmentsAdmin;
 
+// Get appointments for a specific user
+export const getUserAppointments = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const query = `
+      SELECT 
+        a.*,
+        d.firstName as doctorFirstName, d.lastName as doctorLastName, d.specialty, d.consultationFee
+      FROM appointments a
+      JOIN doctors d ON a.doctorId = d.id
+      WHERE a.userId = ?
+      ORDER BY a.date DESC, a.time DESC
+    `;
+    const appointments = await executeQuery(query, [userId]);
+    
+    res.json(appointments);
+  } catch (error) {
+    console.error('Get user appointments error:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
 export const getAppointmentById = async (req, res) => {
   try {
     const { id } = req.params;
