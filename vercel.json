@@ -20,7 +20,7 @@
     }
   ],
   "env": {
-    "VITE_API_URL": "@api-url"
+    "VITE_API_URL": "https://medibook-api.onrender.com"
   },
   "buildCommand": "cd frontend && npm run build",
   "outputDirectory": "frontend/dist",
