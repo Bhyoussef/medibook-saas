@@ -62,7 +62,7 @@ JWT_AUDIENCE=medibook-users
 
 ### CORS Configuration
 ```
-FRONTEND_URL=https://your-vercel-app.vercel.app
+FRONTEND_URL=https://your-frontend-app.onrender.com
 ```
 
 ### Email Configuration (Optional but recommended)
@@ -126,7 +126,7 @@ https://your-service-name.onrender.com/api/health
 1. **Deploy Web Service**: Click "Create Web Service"
 2. **Wait for Build**: Render will build and deploy
 3. **Copy URL**: Get your backend URL (e.g., `https://medibook-api.onrender.com`)
-4. **Update Frontend**: In Vercel, set `VITE_API_URL` to your Render URL
+4. **Update Frontend**: In your frontend service, set `VITE_API_URL` to your Render URL
 5. **Test**: Visit your deployed application
 
 ## 🚨 Troubleshooting
@@ -134,7 +134,7 @@ https://your-service-name.onrender.com/api/health
 ### Common Issues:
 1. **Build Fails**: Check `package.json` has correct start script
 2. **Database Connection**: Verify database credentials
-3. **CORS Errors**: Ensure `FRONTEND_URL` matches your Vercel URL
+3. **CORS Errors**: Ensure `FRONTEND_URL` matches your Render frontend URL
 4. **Port Issues**: Use `PORT=3001` (Render provides port via env var)
 
 ### Logs:
