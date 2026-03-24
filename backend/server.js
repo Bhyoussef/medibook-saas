@@ -22,7 +22,10 @@ const limiter = rateLimit({
 });
 
 app.use(helmet());
-app.use(cors());
+app.use(cors({
+  origin: ['https://medibook-saas-1.onrender.com', 'http://localhost:3000'],
+  credentials: true
+}));
 app.use(limiter);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
