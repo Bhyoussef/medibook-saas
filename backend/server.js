@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
+import { executeQuery } from './config/database.js';
 
 import authRoutes from './routes/auth.js';
 import appointmentRoutes from './routes/appointments.js';
@@ -32,6 +33,62 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'OK', message: 'Server is running' });
+});
+
+// Database setup endpoint (for initial setup)
+app.post('/api/setup-database', async (req, res) => {
+  try {
+    const fs = await import('fs');
+    const path = await import('path');
+    
+    // Read schema file
+    const schemaPath = path.join(process.cwd(), '..', 'database', 'schema_postgresql.sql');
+    const seedPath = path.join(process.cwd(), '..', 'database', 'seed_data_postgresql.sql');
+    
+    let schemaSQL = '';
+    let seedSQL = '';
+    
+    try {
+      schemaSQL = fs.readFileSync(schemaPath, 'utf8');
+      seedSQL = fs.readFileSync(seedPath, 'utf8');
+    } catch (error) {
+      return res.status(500).json({ 
+        success: false, 
+        message: 'Could not read database files',
+        error: error.message 
+      });
+    }
+    
+    // Execute schema
+    const schemaStatements = schemaSQL.split(';').filter(stmt => stmt.trim());
+    for (const statement of schemaStatements) {
+      if (statement.trim()) {
+        await executeQuery(statement);
+      }
+    }
+    
+    // Execute seed data
+    const seedStatements = seedSQL.split(';').filter(stmt => stmt.trim());
+    for (const statement of seedStatements) {
+      if (statement.trim()) {
+        await executeQuery(statement);
+      }
+    }
+    
+    res.json({ 
+      success: true, 
+      message: 'Database setup completed successfully!',
+      tablesCreated: schemaStatements.length,
+      recordsInserted: seedStatements.length
+    });
+  } catch (error) {
+    console.error('Database setup error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Database setup failed',
+      error: error.message 
+    });
+  }
 });
 
 app.use('/api/auth', authRoutes);
