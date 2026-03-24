@@ -2,8 +2,8 @@ version: 1
 build:
   command: npm install && npm run build
   publish: dist
-# Handle client-side routing for SPA
-rewrites:
-  - source: /*
+# SPA routing configuration
+routes:
+  - type: rewrite
+    source: /*
     destination: /index.html
-    status: 200
