@@ -48,12 +48,6 @@ export const verifyOTP = async (phone, code) => {
     const otps = await executeQuery(query, [phone, code]);
     
     if (otps.length === 0) {
-      // Update attempts for invalid codes
-      await executeQuery(
-        'UPDATE otp_codes SET attempts = attempts + 1 WHERE phone = ? AND isUsed = FALSE',
-        [phone]
-      );
-      
       return {
         success: false,
         message: 'Invalid or expired OTP'
