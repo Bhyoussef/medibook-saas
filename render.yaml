@@ -1,39 +1,49 @@
 services:
   # Backend API Service
   - type: web
-    name: medibook-api
-    env: node
+    name: medibook-saas-backend
+    env: docker
+    dockerfilePath: ./backend/Dockerfile.prod
     plan: free
-    buildCommand: "cd backend && npm install"
+    buildCommand: "cd backend && npm ci && npm run build:prod"
     startCommand: "cd backend && npm start"
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: 3001
-      - key: DB_HOST
-        value: your-database-host
-      - key: DB_PORT
-        value: 3306
-      - key: DB_NAME
-        value: medibook_prod
-      - key: DB_USER
-        value: your-db-user
-      - key: DB_PASSWORD
-        value: your-db-password
+        value: 5000
+      - key: DATABASE_URL
+        value: ${DATABASE_URL}
+      - key: JWT_SECRET
+        value: ${JWT_SECRET}
       - key: JWT_ACCESS_SECRET
-        value: your-jwt-access-secret
+        value: ${JWT_ACCESS_SECRET}
       - key: JWT_REFRESH_SECRET
-        value: your-jwt-refresh-secret
+        value: ${JWT_REFRESH_SECRET}
       - key: EMAIL_HOST
-        value: smtp.gmail.com
+        value: ${EMAIL_HOST}
       - key: EMAIL_PORT
-        value: 587
+        value: ${EMAIL_PORT}
       - key: EMAIL_USER
-        value: your-email@gmail.com
+        value: ${EMAIL_USER}
       - key: EMAIL_PASS
-        value: your-app-password
+        value: ${EMAIL_PASS}
     healthCheckPath: /api/health
+    autoDeploy: true
+
+  # Frontend Service
+  - type: web
+    name: medibook-saas-frontend
+    plan: free
+    buildCommand: "cd frontend && npm ci && npm run build:prod"
+    publishPath: ./frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://medibook-saas-backend.onrender.com/api
+      - key: VITE_APP_NAME
+        value: MediBook
+      - key: NODE_ENV
+        value: production
     autoDeploy: true
 
   # Database Service (if using Render's PostgreSQL)

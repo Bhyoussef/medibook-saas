@@ -1,0 +1,25 @@
+name: Setup Environment
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup environment files
+        run: |
+          echo "Setting up environment configuration..."
+          
+          # Create .env files for production
+          echo "NODE_ENV=production" >> ./backend/.env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> ./backend/.env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> ./backend/.env
+          
+          echo "VITE_API_URL=https://medibook-saas.onrender.com/api" >> ./frontend/.env
+          echo "VITE_APP_NAME=MediBook" >> ./frontend/.env
