@@ -7,7 +7,7 @@ import FormInput from '../components/ui/FormInput';
 import Alert from '../components/ui/Alert';
 import LoadingSpinner from '../components/LoadingSpinner';
 
-console.log('🔍 Login.jsx imports loaded successfully - v2.0');
+console.log('🔍 Login.jsx imports loaded successfully - v2.1 - FIXED VERSION');
 
 const Login = () => {
   console.log('🔍 Login component mounting...');
