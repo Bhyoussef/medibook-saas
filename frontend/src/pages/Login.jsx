@@ -37,7 +37,7 @@ const Login = () => {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/auth/send-otp`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://medibook-saas.onrender.com/api'}/auth/send-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone: formData.phone }),
@@ -72,7 +72,7 @@ const Login = () => {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/auth/verify-otp`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://medibook-saas.onrender.com/api'}/auth/verify-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone: formData.phone, code: formData.otp }),
@@ -108,7 +108,7 @@ const Login = () => {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/auth/complete-profile`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://medibook-saas.onrender.com/api'}/auth/complete-profile`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

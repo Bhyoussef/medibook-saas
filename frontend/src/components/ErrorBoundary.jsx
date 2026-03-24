@@ -30,7 +30,7 @@ class ErrorBoundary extends React.Component {
     // In production, you would send this to an error logging service
     // like Sentry, LogRocket, or your own backend
     try {
-      fetch('/api/errors', {
+      fetch(`${import.meta.env.VITE_API_URL || 'https://medibook-saas.onrender.com/api'}/errors`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
