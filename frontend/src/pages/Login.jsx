@@ -7,7 +7,11 @@ import FormInput from '../components/ui/FormInput';
 import Alert from '../components/ui/Alert';
 import LoadingSpinner from '../components/LoadingSpinner';
 
+console.log('🔍 Login.jsx imports loaded successfully');
+
 const Login = () => {
+  console.log('🔍 Login component mounting...');
+  
   const [formData, setFormData] = useState({
     phone: '',
     otp: '',
@@ -23,37 +27,51 @@ const Login = () => {
     email: '',
     dateOfBirth: '',
   });
+  
   const { loginWithOTP, completeProfile } = useAuth();
   const navigate = useNavigate();
+  
+  console.log('✅ Auth context and navigate loaded successfully');
 
   const handlePhoneSubmit = async (e) => {
+    console.log('🔍 handlePhoneSubmit called with phone:', formData.phone);
     e.preventDefault();
     setLoading(true);
     
     if (!formData.phone) {
+      console.error('❌ Phone number is required');
       setError('Phone number is required');
       setLoading(false);
       return;
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://medibook-saas.onrender.com/api'}/auth/send-otp`, {
+      console.log('🔍 Sending OTP request...');
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://medibook-saas.onrender.com/api';
+      console.log('🔍 API URL:', apiUrl);
+      
+      const response = await fetch(`${apiUrl}/auth/send-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone: formData.phone }),
       });
 
+      console.log('🔍 Response status:', response.status);
       const result = await response.json();
+      console.log('🔍 Response result:', result);
       
       if (response.ok) {
+        console.log('✅ OTP sent successfully');
         setError('');
         setMessage('OTP sent successfully! Check console for OTP.');
         setShowOTP(true);
       } else {
+        console.error('❌ OTP send failed:', result);
         setMessage('');
         setError(result.message || 'Failed to send OTP');
       }
     } catch (err) {
+      console.error('❌ Network error in OTP send:', err);
       setMessage('');
       setError('Network error. Please try again.');
     } finally {
