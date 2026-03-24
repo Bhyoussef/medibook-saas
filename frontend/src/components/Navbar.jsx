@@ -50,6 +50,9 @@ const Navbar = () => {
             <Link to="/appointments" className="text-gray-600 hover:text-gray-900 px-4 py-2 text-sm font-medium rounded-xl hover:bg-gray-50 transition-all duration-200">
               Appointments
             </Link>
+            <Link to="/admin" className="text-gray-600 hover:text-gray-900 px-4 py-2 text-sm font-medium rounded-xl hover:bg-gray-50 transition-all duration-200">
+              Admin
+            </Link>
             
             {isAuthenticated ? (
               <>
