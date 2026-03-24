@@ -2,7 +2,8 @@ version: 1
 build:
   command: npm install && npm run build
   publish: dist
-# Handle client-side routing
-staticPublish:
-  # Redirect all routes to index.html for SPA
-  directoryListing: false
+# Basic SPA configuration
+redirects:
+  - source: /*
+    destination: /index.html
+    type: 200
