@@ -11,22 +11,7 @@ export const getAllDoctors = async (req, res) => {
     res.json(doctors);
   } catch (error) {
     console.error('Get doctors error:', error);
-    // If database tables don't exist, return mock data
-    if (error.message.includes('does not exist') || error.message.includes('relation')) {
-      const mockDoctors = [
-        { id: 1, firstName: 'Sarah', lastName: 'Johnson', specialty: 'Cardiology', experience: '12 years', rating: 4.8, available: true },
-        { id: 2, firstName: 'Michael', lastName: 'Chen', specialty: 'Dermatology', experience: '8 years', rating: 4.9, available: true },
-        { id: 3, firstName: 'Emily', lastName: 'Rodriguez', specialty: 'Pediatrics', experience: '15 years', rating: 4.7, available: true },
-        { id: 4, firstName: 'David', lastName: 'Kim', specialty: 'Orthopedics', experience: '10 years', rating: 4.6, available: true },
-        { id: 5, firstName: 'Lisa', lastName: 'Thompson', specialty: 'General Practice', experience: '20 years', rating: 4.8, available: true },
-        { id: 6, firstName: 'James', lastName: 'Wilson', specialty: 'Neurology', experience: '12 years', rating: 4.9, available: true },
-        { id: 7, firstName: 'Maria', lastName: 'Garcia', specialty: 'Gynecology', experience: '18 years', rating: 4.7, available: true },
-        { id: 8, firstName: 'Robert', lastName: 'Taylor', specialty: 'Psychiatry', experience: '25 years', rating: 4.5, available: true }
-      ];
-      res.json(mockDoctors);
-    } else {
-      res.status(500).json({ message: 'Internal server error' });
-    }
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
 
