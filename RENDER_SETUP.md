@@ -62,7 +62,7 @@ JWT_AUDIENCE=medibook-users
 
 ### CORS Configuration
 ```
-FRONTEND_URL=https://your-frontend-app.onrender.com
+FRONTEND_URL=https://medibook-saas-1.onrender.com
 ```
 
 ### Email Configuration (Optional but recommended)
@@ -134,7 +134,7 @@ https://your-service-name.onrender.com/api/health
 ### Common Issues:
 1. **Build Fails**: Check `package.json` has correct start script
 2. **Database Connection**: Verify database credentials
-3. **CORS Errors**: Ensure `FRONTEND_URL` matches your Render frontend URL
+3. **CORS Errors**: Ensure `FRONTEND_URL` matches your Render frontend URL (https://medibook-saas-1.onrender.com)
 4. **Port Issues**: Use `PORT=3001` (Render provides port via env var)
 
 ### Logs:
