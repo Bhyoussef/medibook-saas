@@ -30,22 +30,28 @@ class ErrorBoundary extends React.Component {
     // In production, you would send this to an error logging service
     // like Sentry, LogRocket, or your own backend
     try {
-      fetch(`${import.meta.env.VITE_API_URL || 'https://medibook-saas.onrender.com/api'}/errors`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          error: error.toString(),
-          stack: error.stack,
-          componentStack: errorInfo.componentStack,
-          timestamp: new Date().toISOString(),
-          userAgent: navigator.userAgent,
-          url: window.location.href
-        })
-      }).catch(err => {
-        console.error('Failed to log error:', err);
-      });
+      // Only log if we have a valid API URL and it's not an error endpoint issue
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://medibook-saas.onrender.com/api';
+      
+      // Don't try to log errors about the error logging itself
+      if (!error.message.includes('errors') && !error.message.includes('Failed to fetch')) {
+        fetch(`${apiUrl}/errors`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            error: error.toString(),
+            stack: error.stack,
+            componentStack: errorInfo.componentStack,
+            timestamp: new Date().toISOString(),
+            userAgent: navigator.userAgent,
+            url: window.location.href
+          })
+        }).catch(err => {
+          console.error('Failed to log error:', err);
+        });
+      }
     } catch (err) {
       console.error('Error logging service failed:', err);
     }

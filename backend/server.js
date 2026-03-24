@@ -35,6 +35,25 @@ app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'OK', message: 'Server is running' });
 });
 
+// Error logging endpoint
+app.post('/api/errors', (req, res) => {
+  try {
+    const { error, stack, componentStack, timestamp, userAgent, url } = req.body;
+    console.error('Frontend Error:', {
+      error,
+      stack,
+      componentStack,
+      timestamp,
+      userAgent,
+      url
+    });
+    res.status(200).json({ message: 'Error logged successfully' });
+  } catch (error) {
+    console.error('Error logging failed:', error);
+    res.status(500).json({ message: 'Failed to log error' });
+  }
+});
+
 // Initialize database tables on startup
 const initializeDatabase = async () => {
   try {

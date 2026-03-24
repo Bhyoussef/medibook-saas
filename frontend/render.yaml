@@ -2,8 +2,11 @@ version: 1
 build:
   command: npm install && npm run build
   publish: dist
-# SPA routing - Render's recommended approach
+# SPA routing - final attempt
 routes:
+  - type: file
+    path: /index.html
+    execution: server
   - type: rewrite
-    source: /.*
+    source: /*
     destination: /index.html
