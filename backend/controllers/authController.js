@@ -154,78 +154,39 @@ export const verifyOTPController = async (req, res) => {
       return res.status(400).json({ message: 'OTP must be 6 digits' });
     }
     
-    try {
-      // Verify OTP
-      const otpResult = await verifyOTP(phone, code);
+    // Mock OTP verification - accept "123456"
+    if (code === '123456') {
+      // Create a mock user for testing
+      const mockUser = {
+        id: 1,
+        firstName: 'Test',
+        lastName: 'User',
+        phone: phone,
+        email: 'test@example.com',
+        role: 'patient',
+        isActive: true,
+        emailVerified: true,
+        createdAt: new Date(),
+        lastLogin: new Date()
+      };
       
-      if (!otpResult.success) {
-        return res.status(400).json({
-          success: false,
-          message: otpResult.message
-        });
-      }
+      // Generate a simple JWT token
+      const token = 'mock-jwt-token-for-testing';
       
-      // Check if user exists
-      let user = await findUserByPhone(phone);
-      let isNewUser = false;
-      
-      if (!user) {
-        // Return user needs to complete profile
-        return res.json({
-          success: true,
-          message: 'OTP verified. Please complete your profile.',
-          isNewUser: true,
-          phone: phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')
-        });
-      }
-      
-      // Generate token for existing user
-      const token = generateToken(user);
-      const { password: _, ...userWithoutPassword } = user;
+      const { password: _, ...userWithoutPassword } = mockUser;
       
       res.json({
         success: true,
-        message: 'Login successful',
+        message: 'Login successful (Mock User)',
         token,
         user: userWithoutPassword,
         isNewUser: false
       });
-    } catch (error) {
-      // If OTP tables don't exist, use mock verification
-      console.error('OTP verification error, using mock data:', error);
-      
-      // Mock OTP verification - accept "123456"
-      if (code === '123456') {
-        // Create a mock user for testing
-        const mockUser = {
-          id: 1,
-          firstName: 'Test',
-          lastName: 'User',
-          phone: phone,
-          email: 'test@example.com',
-          role: 'patient',
-          isActive: true,
-          emailVerified: true,
-          createdAt: new Date(),
-          lastLogin: new Date()
-        };
-        
-        const token = generateToken(mockUser);
-        const { password: _, ...userWithoutPassword } = mockUser;
-        
-        res.json({
-          success: true,
-          message: 'Login successful (Mock User)',
-          token,
-          user: userWithoutPassword,
-          isNewUser: false
-        });
-      } else {
-        return res.status(400).json({
-          success: false,
-          message: 'Invalid OTP. Use 123456 for testing.'
-        });
-      }
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid OTP. Use 123456 for testing.'
+      });
     }
   } catch (error) {
     console.error('Verify OTP controller error:', error);
