@@ -21,6 +21,8 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [showOTP, setShowOTP] = useState(false);
   const [showProfileForm, setShowProfileForm] = useState(false);
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
   const [profileData, setProfileData] = useState({
     firstName: '',
     lastName: '',
